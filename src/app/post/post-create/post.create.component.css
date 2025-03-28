@@ -1,35 +1,42 @@
 mat-card {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 10px;
+  max-width: 100px; 
+  margin: 40px auto; 
+  padding: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   background-color: #ffffff;
+  text-align: center; 
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  align-items: center; 
+  gap: 12px;
 }
 
 mat-form-field {
-  width: 100%;
+  margin-top: 15px;
+  width: 50%; 
 }
 
 button[type="submit"] {
-  width: 100%;
-  padding: 10px 0;
+  width: 50%;
+  padding: 12px;
   font-size: 16px;
   font-weight: bold;
   border-radius: 8px;
-  background-color: #608BC1; 
+  background-color: #ff8080;
   color: white;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button[type="submit"]:hover {
-  background-color: #4e73a3; 
+  background-color: #ff6666;
+}
+
+button[type="submit"]:active {
+  transform: scale(0.98);
 }
 
 mat-error {
@@ -39,4 +46,30 @@ mat-error {
 
 mat-card:hover {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+input[type='file'] {
+  visibility: hidden;
+}
+
+button[mat-stroked-button] {
+  background-color: #ff8080;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button[mat-stroked-button]:hover {
+  background-color: #ff8080;
+}
+
+button[mat-stroked-button]:active {
+  transform: scale(0.98);
 }
