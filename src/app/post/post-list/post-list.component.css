@@ -1,7 +1,11 @@
 .post-image{
-    width: 100;
+    width: 100px;
 }
 
 .post-image img{
-    width: 100;
+    width: 100px;
 }
+
+mat-paginator{  
+    margin-top: 1rem;  
+}  

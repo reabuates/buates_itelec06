@@ -1,16 +1,59 @@
 <mat-card>
-    <mat-accordion multi="true" *ngIf="posts.length>=0">
-       <mat-expansion-panel *ngFor="let post of posts">
-           <mat-expansion-panel-header>{{post.title}}</mat-expansion-panel-header>
-           <div class= "post-image">  
-            <img [src]= "post.imagePath" [alt]= "post.title">  
-          </div>  
-           <P>{{post.content}}</P>
-           <mat-action-row>
-               <a mat-flat-button color="accent" [routerLink] = "['/edit',post.id]">EDIT</a>  
-               <button mat-flat-button color="accent"(click)="onDelete(post.id)">DELETE</button>
-           </mat-action-row>
-       </mat-expansion-panel>
-   </mat-accordion>
-   <p *ngIf="posts.length<=0"> No post added yet</p>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+
+  <!-- Search box -->
+  <mat-form-field appearance="outline" color="accent" class="search-box">
+    <mat-label>Search</mat-label>
+    <input matInput [(ngModel)]="searchTerm" placeholder="Type to search..." />
+  </mat-form-field>
+
+  <!-- Sort dropdown -->
+  <mat-form-field appearance="fill" class="sort-box">
+    <mat-label>Sort By</mat-label>
+    <mat-select [(ngModel)]="sortType" (selectionChange)="onSortChange(sortType)">
+      <mat-option value="name">Name</mat-option>
+      <mat-option value="views">Views</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Accordion view -->
+  <mat-accordion multi="true" *ngIf="posts.length >= 0">
+    <mat-expansion-panel *ngFor="let post of filteredPosts()" (opened)="onView(post)">
+      <mat-expansion-panel-header>
+        {{ post.title }}
+        <span class="spacer"></span>
+        <mat-icon aria-label="Views">visibility</mat-icon>
+        <span>{{ post.views || 0 }}</span>
+      </mat-expansion-panel-header>
+
+      <div class="post-image">
+        <img [src]="post.imagePath" [alt]="post.title">
+      </div>
+
+      <!-- ✅ Cleaned-up content display -->
+      <p style="white-space: pre-line;">{{ post.content.trim() }}</p>
+
+      <mat-action-row *ngIf="userIsAuthenticated && userId === post.creator">
+        <a mat-flat-button color="accent" [routerLink]="['/edit', post.id]">EDIT</a>
+        <button mat-flat-button color="accent" (click)="onDelete(post.id)">DELETE</button>
+
+        <button mat-icon-button color="warn" matTooltip="Like this post" (click)="onLike(post)">
+          <mat-icon>thumb_up</mat-icon>
+        </button>
+        <span>{{ post.likes || 0 }}</span>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <!-- Pagination -->
+  <mat-paginator
+    [length]="totalposts"
+    [pageSize]="postperpage"
+    [pageSizeOptions]="pageSizeOption"
+    (page)="onChangedPage($event)"
+    *ngIf="posts.length > 0">
+  </mat-paginator>
+
+  <!-- No posts message -->
+  <p *ngIf="!isLoading && posts.length <= 0">No post added yet</p>
 </mat-card>

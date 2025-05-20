@@ -1,6 +1,7 @@
 import { AbstractControl } from "@angular/forms";
 import { Observable, Observer, of } from "rxjs";
 
+
 export const mimetype = (
   control: AbstractControl
 ): Promise<{ [key: string]: any } | null> | Observable<{ [key: string]: any } | null> => {
@@ -8,8 +9,10 @@ export const mimetype = (
     return of(null);
   }
 
+
   const file = control.value as File;
   const filereader = new FileReader();
+
 
   return new Observable<{ [key: string]: any } | null>((observer: Observer<{ [key: string]: any } | null>) => {
     filereader.addEventListener("loadend", () => {
@@ -17,17 +20,19 @@ export const mimetype = (
       let header = "";
       let isValid = false;
 
+
       for (let i = 0; i < arr.length; i++) {
         header += arr[i].toString(16);
       }
 
+
       switch (header) {
-        case "89504e47": 
-        case "ffd8ffe0": 
-        case "ffd8ffe1": 
-        case "ffd8ffe2": 
-        case "ffd8ffe3": 
-        case "ffd8ffe8": 
+        case "89504e47": // PNG
+        case "ffd8ffe0": // JPG
+        case "ffd8ffe1": // JPG
+        case "ffd8ffe2": // JPG
+        case "ffd8ffe3": // JPG
+        case "ffd8ffe8": // JPG
           isValid = true;
           break;
         default:
@@ -39,16 +44,16 @@ export const mimetype = (
       observer.complete();
     });
 
+
     filereader.addEventListener("error", () => {
       observer.error({ invalidMimeType: true });
       observer.complete();
     });
 
+
     filereader.readAsArrayBuffer(file);
   });
 };
-
-
 
 
 
